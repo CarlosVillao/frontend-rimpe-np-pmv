@@ -274,8 +274,8 @@ const NotaVentaForm = ({ onSubmit, initialData, allowEditPrice = true }) => {
           <select value={formaPago} onChange={(e) => setFormaPago(e.target.value)} className="border p-2 rounded w-full">
             <option value="EFECTIVO">Efectivo</option>
             <option value="DEBITO">Débito</option>
-            <option value="CREDITO_1">Crédito 10%</option>
-            <option value="CREDITO_2">Crédito 15%</option>
+            <option value="CREDITO_10">Crédito 10%</option>
+            <option value="CREDITO_15">Crédito 15%</option>
           </select>
         </div>
 
