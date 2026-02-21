@@ -18,7 +18,6 @@ const NotaVentaForm = ({ onSubmit, initialData, allowEditPrice = true }) => {
 
   useEffect(() => {
     if (initialData) {
-      // Adaptar cliente desde initialData
       const clienteAdaptado = {
         id: initialData.cliente_id,
         identificacion: initialData.cliente_identificacion || '',
@@ -28,13 +27,12 @@ const NotaVentaForm = ({ onSubmit, initialData, allowEditPrice = true }) => {
       };
       setCliente(clienteAdaptado);
 
-      // Adaptar productos
       const adaptados = (initialData.productos || []).map(p => {
         const precio = Number(p.precio_unitario || p.pvp);
         const cant = Number(p.cantidad);
         return {
           producto_id: p.producto_id,
-          descripcion: p.descripcion || p.nombre, // 👈 ahora usamos descripcion
+          descripcion: p.descripcion || p.nombre,
           pvp: precio,
           cantidad: cant,
           subtotal: Number(p.subtotal) || cant * precio
@@ -42,9 +40,17 @@ const NotaVentaForm = ({ onSubmit, initialData, allowEditPrice = true }) => {
       });
       setProductos(adaptados);
 
-      // Inicializar identificación, forma de pago y observación
+      // 🔧 Mapear valores antiguos a los nuevos
+      let formaPagoInicial = initialData.forma_pago || 'EFECTIVO';
+      if (formaPagoInicial === 'CREDITO_1') formaPagoInicial = 'CREDITO_10';
+      if (formaPagoInicial === 'CREDITO_2') formaPagoInicial = 'CREDITO_15';
+
+      let tipoPrecioInicial = initialData.tipo_precio || formaPagoInicial;
+      if (tipoPrecioInicial === 'CREDITO_1') tipoPrecioInicial = 'CREDITO_10';
+      if (tipoPrecioInicial === 'CREDITO_2') tipoPrecioInicial = 'CREDITO_15';
+
       setIdentificacion(clienteAdaptado.identificacion);
-      setFormaPago(initialData.forma_pago || 'EFECTIVO');
+      setFormaPago(formaPagoInicial);
       setObservacion(initialData.observacion || '');
     }
   }, [initialData]);
