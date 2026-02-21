@@ -37,6 +37,7 @@ const NotasVenta = () => {
 
   const handleCreate = async (nota) => {
     try {
+      console.log("Payload enviado al backend:", nota);
       setLoading(true);
       await createNotaVenta(nota);
       setSuccessMessage("Nota de venta creada con éxito");
@@ -51,6 +52,7 @@ const NotasVenta = () => {
 
   const handleUpdate = async (nota) => {
     try {
+      console.log("Payload enviado al backend (update):", nota);
       setLoading(true);
       await updateNotaVenta(editingNota.id, nota);
       setSuccessMessage("Nota de venta actualizada con éxito");
