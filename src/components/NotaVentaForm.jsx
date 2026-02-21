@@ -182,6 +182,7 @@ const NotaVentaForm = ({ onSubmit, initialData, allowEditPrice = true }) => {
     }
 
     try {
+      console.log(payload);
       await onSubmit(payload);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'Error al guardar');
