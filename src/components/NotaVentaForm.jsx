@@ -71,8 +71,8 @@ const NotaVentaForm = ({ onSubmit, initialData, allowEditPrice = true }) => {
       let precioUnitario = producto.pvp;
       if (formaPago === 'EFECTIVO') precioUnitario = producto.efectivo;
       if (formaPago === 'DEBITO') precioUnitario = producto.pvp;
-      if (formaPago === 'CREDITO_1') precioUnitario = producto.cred_10;
-      if (formaPago === 'CREDITO_2') precioUnitario = producto.cred_15;
+      if (formaPago === 'CREDITO_10') precioUnitario = producto.cred_10;
+      if (formaPago === 'CREDITO_15') precioUnitario = producto.cred_15;
 
       const subtotal = precioUnitario * cantidad;
 
