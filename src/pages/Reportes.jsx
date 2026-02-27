@@ -30,7 +30,7 @@ const Reportes = () => {
       const d = await reporteDiario();
       const m = await reporteMensual();
       const c = await reporteComisiones(); // 👈 carga comisiones
-      
+
       setDiario(d);
       setMensual(m);
       setComisiones(c);
@@ -133,47 +133,37 @@ const Reportes = () => {
       </div>
       {/* Modal Detalle Diario */}
       {showDiarioModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-3xl">
-            <h2 className="text-xl font-semibold mb-4">Detalle Reporte Diario</h2>
-            <table className="w-full border-collapse border border-gray-300 mb-4">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border p-2">Número Nota</th>
-                  <th className="border p-2">Producto</th>
-                  <th className="border p-2">Cantidad</th>
-                  <th className="border p-2">Costo</th>
-                  <th className="border p-2">Venta</th>
-                  <th className="border p-2">Ganancia</th>
-                </tr>
-              </thead>
-              <tbody>
-                {detalleNotas.map((n, i) => (
-                  <tr key={i}>
-                    <td className="border p-2">{n.numero}</td>
-                    <td className="border p-2">{n.producto}</td>
-                    <td className="border p-2">{n.cantidad}</td>
-                    <td className="border p-2">${(Number(n.costo) * Number(n.cantidad)).toFixed(2)}</td>
-                    <td className="border p-2">${Number(n.venta).toFixed(2)}</td>
-                    <td className="border p-2">${Number(n.ganancia).toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="mt-6 flex justify-center space-x-4">
+          <button
+            onClick={async () => {
+              const fecha = new Date();
+              const anio = fecha.getFullYear();
+              const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+              const dia = String(fecha.getDate()).padStart(2, '0');
 
-            <p><strong>Total Costos:</strong> ${Number(totalCosto).toFixed(2)}</p>
-            <p><strong>Total Ventas:</strong> ${Number(totalMonto).toFixed(2)}</p>
-            <p><strong>Total Ganancia:</strong> ${Number(totalGanancia).toFixed(2)}</p>
+              const desde = `${anio}-${mes}-${dia}`;
+              const hasta = `${anio}-${mes}-${dia}`;
 
-            <div className="mt-6 flex justify-center space-x-4">
-              <button
-                onClick={() => setShowDiarioModal(false)}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-              >
-                Cerrar
-              </button>
-            </div>
-          </div>
+              const blob = await exportarExcel(desde, hasta);
+              const url = window.URL.createObjectURL(new Blob([blob]));
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', `reporte_diario_${anio}_${mes}_${dia}.xlsx`);
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+            }}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+          >
+            Exportar Excel
+          </button>
+
+          <button
+            onClick={() => setShowDiarioModal(false)}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+          >
+            Cerrar
+          </button>
         </div>
       )}
 
